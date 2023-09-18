@@ -47,4 +47,8 @@
 <div id='id-section3'/>   
 
 
-### Entry 3: 2023-XX-XX.
+### Entry 3: 2023-09-18.
+
+-  We looked at sequence aligment (SAM) files to understand the info they contain in terms of read mapping to the reference, coordinates, and flags in seuqencing
+-  We set up the process_bam.sh script to convert sam to (binary) bam format, sort based on coordinates, and remove PCR duplicates.  For this, we used a pair of programs: `samtools` and `sambamba`
+-  We began editing the bam_stats.sh script to calculate mapping statistics and depth of coverage.
