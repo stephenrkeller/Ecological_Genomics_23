@@ -45,3 +45,60 @@ dev.off()
 # Get the total number of sites sequenced:
 
 sum(theta$nSites)
+
+# plot the 2D SFS (for ex, with black vs. red spruce
+
+# below code taken from https://github.com/isinaltinkaya/WPSG2022/blob/main/fst_pbs.md
+
+
+##run in R                      
+yc<-scan("yri.ceu.ml")
+yj<-scan("yri.jpt.ml")
+jc<-scan("jpt.ceu.ml")
+source("plot2dSFS.R")
+plot2<-function(s,...){
+  dim(s)<-c(21,21)
+  s[1]<-NA
+  s[21,21]<-NA
+  s<-s/sum(s,na.rm=T)
+  
+  pal <- color.palette(c("darkgreen","#00A600FF","yellow","#E9BD3AFF","orange","red4","darkred","black"), space="rgb")
+  pplot(s/sum(s,na.rm=T),pal=pal,...)
+}
+
+plot2(yc,ylab="YRI",xlab="CEU")
+x11()
+plot2(yj,ylab="YRI",xlab="JPT")
+x11()
+plot2(jc,ylab="JPT",xlab="CEU")
+
+)
+
+# Let's see how the Fst and PBS varies between different regions of the genome my using a sliding windows approach (windows site of 50kb)
+
+
+# $REALSFS fst index yri.saf.idx jpt.saf.idx ceu.saf.idx -fstout yri.jpt.ceu -sfs yri.jpt.ml -sfs yri.ceu.ml -sfs jpt.ceu.ml
+# $REALSFS fst stats2 yri.jpt.ceu.fst.idx -win 50000 -step 10000 >slidingwindowBackground
+
+
+r<-read.delim("slidingwindowBackground",as.is=T,head=T)
+names(r)[-c(1:4)] <- c("wFst_YRI_JPT","wFst_YRI_CEU","wFst_JPT_CEU","PBS_YRI","PBS_JPT","PBS_CEU")
+
+head(r) #print the results to the screen
+
+#plot the distribution of Fst
+mmax<-max(c(r$wFst_YRI_JPT,r$wFst_YRI_CEU,r$wFst_JPT_CEU),na.rm=T)
+par(mfcol=c(3,2))
+hist(r$wFst_YRI_JPT,col="lavender",xlim=c(0,mmax),br=20)
+hist(r$wFst_YRI_CEU,col="mistyrose",xlim=c(0,mmax),br=20)
+hist(r$wFst_JPT_CEU,col="hotpink",xlim=c(0,mmax),br=20)
+
+mmax<-max(c(r$PBS_CEU,r$PBS_YRI,r$PBS_JPT),na.rm=T)
+
+#plot the distribution of PBS
+mmax<-max(c(r$PBS_CEU,r$PBS_YRI,r$PBS_JPT),na.rm=T)
+hist(r$PBS_YRI,col="lavender",xlim=c(0,mmax),br=20)
+hist(r$PBS_CEU,col="mistyrose",xlim=c(0,mmax),br=20)
+hist(r$PBS_JPT,col="hotpink",xlim=c(0,mmax),br=20)
+
+
