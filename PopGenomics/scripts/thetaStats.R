@@ -48,6 +48,7 @@ sum(theta$nSites)
 
 # plot the 2D SFS (for ex, with black vs. red spruce
 
+###############################################################################
 # below code taken from https://github.com/isinaltinkaya/WPSG2022/blob/main/fst_pbs.md
 
 
